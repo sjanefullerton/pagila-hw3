@@ -6,7 +6,7 @@
  * (The actors do not necessarily have to all be in the same movie, and you do not necessarily need one actor from each movie.)
  */
 
-SELECT f1.title FROM film f1
+SELECT f2.title FROM film f1
 JOIN film_actor a1 USING (film_id)
 JOIN actor AS actor USING (actor_id)
 JOIN film_actor a2 USING (actor_id)
