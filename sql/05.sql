@@ -6,3 +6,11 @@
  * HINT:
  * This can be solved with a self join on the film_actor table.
  */
+
+
+SELECT title FROM film
+JOIN film_actor USING (film_id)
+JOIN actor USING (actor_id)
+JOIN film_actor USING (actor_id) 
+JOIN film USING(film_id) WHERE title = 'American Circus';
+
