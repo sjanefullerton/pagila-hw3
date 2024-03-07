@@ -7,10 +7,11 @@
  * This can be solved with a self join on the film_actor table.
  */
 
-SELECT f4.title FROM film AS f1
-JOIN film_actor AS f2 ON (f1.film_id = f2.film_id)
-JOIN actor USING (actor_id)
-JOIN film_actor AS f3 ON (actor.actor_id = f3.actor_id)
-JOIN film AS f4 ON (f4.film_id = f3.film_id)
-WHERE f1.title = 'American Circus'
-ORDER BY f4.title;
+SELECT f1.title FROM film f1
+JOIN film_actor a1 USING (film_id)
+JOIN film_actor a2 USING (actor_id)
+JOIN film f2 ON (a2.film_id = f2.film_id) 
+WHERE f2.title = 'AMERICAN CIRCUS'
+ORDER BY title;
+
+
