@@ -8,9 +8,9 @@
  */
 
 
-SELECT title FROM film
-JOIN film_actor as f1 USING (film_id)
+SELECT title FROM film as f1
+JOIN film_actor as f2 USING (film_id)
 JOIN actor USING (actor_id)
-JOIN film_actor as f2 USING (actor_id) 
+JOIN film_actor as f3 USING (actor_id) 
 JOIN film USING(film_id) WHERE title = 'American Circus'
 ORDER BY title;
