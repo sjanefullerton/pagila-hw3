@@ -6,22 +6,19 @@
 
 SELECT first_name, last_name FROM actor
 WHERE actor_id IN (
-    SELECT actor_id
-    FROM actor
-    WHERE film_id IN (
-        SELECT film_id
-        FROM film
-        WHERE category = 'Children'
-    )
+    SELECT actor_id FROM actor
+    JOIN film USING (actor_id)
+    JOIN film_actor USING (actor_id)
+    JOIN film_category USING (film_id)
+    JOIN category USING (category_id)
+    WHERE category.name IN ('Children')
 )
 AND actor_id NOT IN (
-    SELECT actor_id
-    FROM actor
-    WHERE film_id IN (
-        SELECT film_id
-        FROM film
-        WHERE category = 'Horror'
-    )
-);
-
-
+    SELECT actor_id FROM actor
+    JOIN film USING (actor_id)
+    JOIN film_actor USING (actor_id)
+    JOIN film_category USING (film_id)
+    JOIN category USING (category_id)
+    WHERE category.name IN ('Horror')
+)
+ORDER BY last_name;
