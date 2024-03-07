@@ -21,9 +21,9 @@
 
 SELECT title FROM (
     SELECT f2.title , COUNT(f2.title) AS "count" FROM film f
-    JOIN film_category AS fc1 USING (film_id)
+    JOIN film_category AS fc1 USING ON (fc1.film_id = f.film_id)
     JOIN film_category AS fc2 USING (category_id)
-    JOIN film f2 USING (film_id)
+    JOIN film f2 ON (f2.film_id = fc2.film_id)
     WHERE f.title = 'AMERICAN CIRCUS'
     GROUP BY f2.title 
 ) selected
