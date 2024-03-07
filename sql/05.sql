@@ -11,6 +11,6 @@ SELECT title FROM film AS f1
 JOIN film_actor AS f2 ON (f1.film_id = f2.film_id)
 JOIN actor USING (actor_id)
 JOIN film_actor AS f3 ON (actor.actor_id = f3.actor_id)
-JOIN film AS f4 USING (film_id) 
-WHERE f1.title = 'American Circus'
+JOIN film AS f4 ON (f4.film_id = f3.film_id)
+WHERE title = 'American Circus'
 ORDER BY title;
