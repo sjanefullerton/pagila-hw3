@@ -19,20 +19,21 @@
  * This problem should be solved by a self join on the "film_category" table.
  */
 
+
+
 SELECT f.title
 FROM film AS f
 JOIN film_category AS fc1 USING (film_id)
 JOIN film_category AS fc2 USING (category_id)
 JOIN (
-    SELECT film_id
-    FROM film_category
-    JOIN film ON film_category.film_id = film.film_id
-    JOIN category ON film_category.category_id = category.category_id
+    SELECT fc.film_id
+    FROM film_category AS fc
+    JOIN film ON fc.film_id = film.film_id
+    JOIN category ON fc.category_id = category.category_id
     WHERE category.name = 'AMERICAN CIRCUS'
 ) AS american_circus_categories ON fc1.film_id = american_circus_categories.film_id
 WHERE fc2.film_id != american_circus_categories.film_id
 GROUP BY f.title
 HAVING COUNT(DISTINCT fc2.category_id) >= 2
 ORDER BY f.title;
-
 
