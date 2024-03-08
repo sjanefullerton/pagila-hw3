@@ -17,5 +17,5 @@ JOIN LATERAL (
     JOIN category cat USING (category_id)
     WHERE category_id = c.category_id
     GROUP BY title, name 
-    ORDER BY COUNT(rental_id) DESC, title DEC LIMIT 5) t ON TRUE
+    ORDER BY COUNT(rental_id) DESC, title DESC LIMIT 5) t ON TRUE
 ORDER BY name, count DESC, title;
