@@ -18,30 +18,8 @@
  *    Ensure that you are not counting a customer that has rented a movie twice as 2 separate customers renting the movie.
  *    I did this by using the SELECT DISTINCT clause.
  */
-
-SELECT film.film_id, film.title
-FROM film
-JOIN inventory ON film.film_id = inventory.film_id
-JOIN rental ON inventory.inventory_id = rental.inventory_id
-JOIN customer ON rental.customer_id = customer.customer_id
-WHERE film.film_id <> (
-    SELECT film_id FROM film WHERE title = 'BUCKET BROTHERHOOD'
-)
-AND film.film_id IN (
-    SELECT inventory.film_id
-    FROM inventory
-    JOIN rental r2 ON inventory.inventory_id = r2.inventory_id
-    JOIN customer c2 ON r2.customer_id = c2.customer_id
-    WHERE c2.customer_id IN (
-        SELECT customer_id
-        FROM rental r3
-        JOIN inventory i3 ON r3.inventory_id = i3.inventory_id
-        JOIN film f3 ON i3.film_id = f3.film_id
-        WHERE f3.title = 'BUCKET BROTHERHOOD'
-    )
-    AND film.title <> 'BUCKET BROTHERHOOD' -- Ensure 'BUCKET BROTHERHOOD' is not counted
-)
-GROUP BY film.film_id, film.title
-HAVING COUNT(DISTINCT customer.customer_id) >= 3;
-
+SELECT title FROM(SELECT title, customer_id FROM film JOIN inventory USING(film_id) JOIN rental USING (inventory_id) WHERE customer_id IN (SELECT customer_id FROM film JOIN inventory USING (inventory_id) WHERE title = 'BUCKET BROTHERHOOD') AND NOT title = 'BUCKET BROTHERHOOD') selected
+GROUP BY title
+HAVING COUNT(title) >=3 
+ORDER BY title;
 
