@@ -11,7 +11,7 @@ FROM customer AS cid
 LEFT JOIN lateral (
     SELECT COUNT(*) AS ac 
     FROM (
-        SELECT film.film_id 
+        SELECT f.film_id 
         FROM rental rent
         JOIN inventory inv ON (rent.inventory_id = inv.inventory_id)
         JOIN film f ON (inv.film_id = f.film_id)
