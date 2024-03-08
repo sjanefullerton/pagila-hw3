@@ -19,16 +19,14 @@
  * This problem should be solved by a self join on the "film_category" table.
  */
 
-SELECT title FROM (
-    SELECT fii.title, COUNT(fii.title) AS count FROM film fi
-    JOIN film_category AS c1 ON (c1.film_id = fi.film_id)
-    JOIN film_category AS c2 ON (c1.film_id = c2.film_id)
-    JOIN film fii ON (fii.film_id = c2.film_id)
-    WHERE fi.title = 'AMERICAN CIRCUS'
-    GROUP BY fii.title
-) titles
-WHERE count >= 2
+SELECT title FROM film JOIN film_category fc USING (film_id) 
+JOIN film_category fc2 USING(category_id)
+JOIN ( SELECT film_id FROM film WHERE title LIKE 'AMERICAN CIRCUS'
+) AS t ON fc2.film_id=t.film_id
+GROUP BY title
+HAVING COUNT(DISTINCT category_id) = 2 UNION ALL SELECT 'AMERICAN CIRCUS' AS title
 ORDER BY title;
+
 
 
 

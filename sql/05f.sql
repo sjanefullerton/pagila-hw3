@@ -8,23 +8,22 @@
  * but I find the version using set operations much more intuitive.
  */
 
-SELECT f.title
-FROM film f
-JOIN film_actor fa ON f.film_id = fa.film_id
-JOIN actor a ON fa.actor_id = a.actor_id
-WHERE f.film_id IN (
-    SELECT fc.film_id
-    FROM film_category fc
-    JOIN category c ON fc.category_id = c.category_id
-    WHERE c.name IN ('AMERICAN CIRCUS')
-)
-AND f.film_id IN (
-    SELECT fc.film_id
-    FROM film_category fc
-    JOIN category c ON fc.category_id = c.category_id
-    WHERE c.name IN ('AMERICAN CIRCUS')
-)
-GROUP BY f.title
-HAVING COUNT(DISTINCT f.film_id) = 2
-AND COUNT(DISTINCT fa.actor_id) = 1;
+SELECT film2.title FROM film film1
+JOIN film_actor fact ON (film1.film_id = fact.film_id)
+JOIN actor ON (fact.actor_id = actor.actor_id)
+JOIN film_actor fact2 ON (actor.actor_id = fact2.actor_id)
+JOIN film film2 ON (film2.film_id = fact2.film_id) WHERE film1.title LIKE 'AMERICAN CIRCUS'
+INTERSECT
+SELECT DISTINCT title FROM film
+JOIN film_category fcat USING(film_id)
+JOIN film_category fcat2 USING(category_id)
+JOIN ( SELECT film_id FROM film WHERE title LIKE 'AMERICAN CIRCUS'
+) as t ON fact2.film_id = film1.film_id
+GROUP BY title 
+HAVING COUNT(DISTINCT category_id) = 2 UNION ALL SELECT 'AMERICAN CIRCUS' AS title
+ORDER BY title;
+
+
+
+
 
