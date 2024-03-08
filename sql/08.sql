@@ -30,10 +30,16 @@ WHERE film.film_id <> (
 AND film.film_id IN (
     SELECT inventory.film_id
     FROM inventory
-    JOIN rental ON inventory.inventory_id = rental.inventory_id
-    JOIN customer ON rental.customer_id = customer.customer_id
-    JOIN film ON inventory.film_id = film.film_id
-    WHERE film.title = 'BUCKET BROTHERHOOD'
+    JOIN rental r2 ON inventory.inventory_id = r2.inventory_id
+    JOIN customer c2 ON r2.customer_id = c2.customer_id
+    WHERE c2.customer_id IN (
+        SELECT customer_id
+        FROM rental r3
+        JOIN inventory i3 ON r3.inventory_id = i3.inventory_id
+        JOIN film f3 ON i3.film_id = f3.film_id
+        WHERE f3.title = 'BUCKET BROTHERHOOD'
+    )
+    AND film.title <> 'BUCKET BROTHERHOOD' -- Ensure 'BUCKET BROTHERHOOD' is not counted
 )
 GROUP BY film.film_id, film.title
 HAVING COUNT(DISTINCT customer.customer_id) >= 3;
