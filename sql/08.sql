@@ -19,30 +19,28 @@
  *    I did this by using the SELECT DISTINCT clause.
  */
 
-
-SELECT title
+SELECT title 
 FROM (
-    SELECT DISTINCT title, actor_id
-    FROM film
-    JOIN film_actor USING (film_id)
+    SELECT DISTINCT title, actor_id 
+    FROM film 
+    JOIN film_actor USING (film_id) 
     WHERE film_id IN (
-        SELECT film_id
-        FROM film_actor
+        SELECT film_id 
+        FROM film_actor 
         WHERE actor_id IN (
-            SELECT actor_id
-            FROM film_actor
-            JOIN film ON film_actor.film_id = film.film_id
-            WHERE CONCAT(first_name, ' ', last_name) = 'RUSSELL BACALL'
+            SELECT actor_id 
+            FROM film_actor 
+            JOIN actor ON film_actor.actor_id = actor.actor_id 
+            WHERE CONCAT(actor.first_name, ' ', actor.last_name) = 'RUSSELL BACALL'
         )
-    )
+    ) 
     AND actor_id NOT IN (
-        SELECT actor_id
-        FROM film_actor
-        JOIN film ON film_actor.film_id = film.film_id
-        WHERE CONCAT(first_name, ' ', last_name) = 'RUSSELL BACALL'
+        SELECT actor_id 
+        FROM film_actor 
+        JOIN actor ON film_actor.actor_id = actor.actor_id 
+        WHERE CONCAT(actor.first_name, ' ', actor.last_name) = 'RUSSELL BACALL'
     )
 ) AS t
 GROUP BY title
 HAVING COUNT(title) >= 3
 ORDER BY title;
-
