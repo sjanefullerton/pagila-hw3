@@ -8,7 +8,7 @@
  * but I find the version using set operations much more intuitive.
  */
 
-SELECT f.title 
+SELECT f.title
 FROM film f
 JOIN film_actor fa ON f.film_id = fa.film_id
 JOIN actor a ON fa.actor_id = a.actor_id
@@ -25,5 +25,6 @@ AND f.film_id IN (
     WHERE c.name IN ('AMERICAN CIRCUS')
 )
 GROUP BY f.title
-HAVING COUNT(DISTINCT fc.category_id) = 2
+HAVING COUNT(DISTINCT f.film_id) = 2
 AND COUNT(DISTINCT fa.actor_id) = 1;
+
