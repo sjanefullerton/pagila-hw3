@@ -14,8 +14,9 @@ FROM (
 JOIN inventory USING (inventory_id)
 JOIN film USING (film_id)
 JOIN category USING (category_id) 
-WHERE RANK <= 5 group by 1, 2, 3
-HAVING COUNT(CASE WHEN cat.name = 'Action' THEN 1 END) >= 4
+WHERE RANK <= 5 
+GROUP BY 1, 2, 3
+HAVING SUM(CASE WHEN cat.name = 'Action' THEN 1 ELSE 0 END) >= 4
 ORDER BY customer_id;
 
 
