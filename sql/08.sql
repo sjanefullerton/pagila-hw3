@@ -19,28 +19,22 @@
  *    I did this by using the SELECT DISTINCT clause.
  */
 
-SELECT title 
-FROM (
-    SELECT DISTINCT title, actor_id 
-    FROM film 
-    JOIN film_actor USING (film_id) 
-    WHERE film_id IN (
-        SELECT film_id 
-        FROM film_actor 
-        WHERE actor_id IN (
-            SELECT actor_id 
-            FROM film_actor 
-            JOIN actor ON film_actor.actor_id = actor.actor_id 
-            WHERE CONCAT(actor.first_name, ' ', actor.last_name) = 'RUSSELL BACALL'
-        )
-    ) 
-    AND actor_id NOT IN (
-        SELECT actor_id 
-        FROM film_actor 
-        JOIN actor ON film_actor.actor_id = actor.actor_id 
-        WHERE CONCAT(actor.first_name, ' ', actor.last_name) = 'RUSSELL BACALL'
-    )
-) AS t
-GROUP BY title
-HAVING COUNT(title) >= 3
-ORDER BY title;
+SELECT film.film_id, film.title
+FROM film
+JOIN inventory ON film.film_id = inventory.film_id
+JOIN rental ON inventory.inventory_id = rental.inventory_id
+JOIN customer ON rental.customer_id = customer.customer_id
+WHERE film.film_id <> (
+    SELECT film_id FROM film WHERE title = 'BUCKET BROTHERHOOD'
+)
+AND film.film_id IN (
+    SELECT inventory.film_id
+    FROM inventory
+    JOIN rental ON inventory.inventory_id = rental.inventory_id
+    JOIN customer ON rental.customer_id = customer.customer_id
+    JOIN film ON inventory.film_id = film.film_id
+    WHERE film.title = 'BUCKET BROTHERHOOD'
+)
+GROUP BY film.film_id, film.title
+HAVING COUNT(DISTINCT customer.customer_id) >= 3;
+
