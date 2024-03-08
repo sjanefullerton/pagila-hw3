@@ -9,10 +9,13 @@
  * and you can SELECT from that VIEW instead of constructing the entire query manually.
  */
 
-SELECT title, STRING_AGG(INITCAP(first_name) || INITCAP(last_name), ', ') AS actors 
-FROM actor
-JOIN film_actor USING (actor_id) JOIN film USING (film_id) JOIN film_category USING (category_id) WHERE name = 'Documentary' AND rating = 'G'
-GROUP BY 1;
+SELECT title, string_agg(concat(INITCAP(split_part(first_name, ' ', 1)), INITCAP(split_part(last_name, ' ', 1))), ', ') AS actors FROM film
+JOIN film_actor USING(film_id)
+JOIN actor USING(actor_id)
+JOIN film_category ON (film.film_id=film_category.film_id)
+JOIN category USING(category_id)
+WHERE CAST(rating as text) LIKE 'G' AND name LIKE 'Documentary'
+group by 1;
 
 
 
