@@ -10,8 +10,8 @@ SELECT DISTINCT cmer.customer_id, cmer.first_name, cmer.last_name FROM customer 
     JOIN inventory USING (inventory_id)
     JOIN film_category USING (film_id)
     JOIN category cat USING (category_id)
-    WHERE customer_Id = cmer.customer_id
-    ORDER BY rental_date DESC ) AS t ON true
+    WHERE customer_id = cmer.customer_id
+    ORDER BY rental_date DESC) AS t ON true
 WHERE t.name = 'Action'
 GROUP BY cmer.customer_id
 HAVING COUNT(cmer.customer_id) >= 4;
