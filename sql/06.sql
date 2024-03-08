@@ -12,19 +12,12 @@ FROM actor a1
 JOIN film_actor fa1 ON a1.actor_id = fa1.actor_id
 JOIN film_actor fa2 ON fa1.film_id = fa2.film_id
 JOIN actor a2 ON fa2.actor_id = a2.actor_id
-WHERE a1.actor_id NOT IN (
+WHERE a1.actor_id <> (
         SELECT actor_id FROM actor
         WHERE first_name = 'RUSSELL' and last_name = 'BACALL'
     )
-AND a2.actor_id IN (
-        SELECT fa3.actor_id
-        FROM film_actor fa3
-        JOIN film_actor fa4 ON fa3.film_id = fa4.film_id
-        JOIN actor a3 ON fa3.actor_id = a3.actor_id
-        JOIN actor a4 ON fa4.actor_id = a4.actor_id
-        WHERE a4.actor_id IN (
-                SELECT actor_id FROM actor
-                WHERE first_name = 'RUSSELL' and last_name = 'BACALL'
-            )
+AND a2.actor_id = (
+        SELECT actor_id FROM actor
+        WHERE first_name = 'RUSSELL' and last_name = 'BACALL'
     )
 ORDER BY "Actor Name";
