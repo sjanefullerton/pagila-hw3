@@ -10,13 +10,8 @@
  */
 
 SELECT title, STRING_AGG(
-    INITCAP(first_name) || INITCAP(last_name), ', ') AS actors FROM (
-    SELECT title,
-    unnest(string_to_array(actors, ', ')) AS actors FROM film_list
-    WHERE rating = 'G'
-    AND category = 'Documentary') stragg
-GROUP BY title
-ORDER BY title;
+    INITCAP(first_name) || INITCAP(last_name), ', ') AS actors FROM actor JOIN film_actor USING (actor_id) JOIN film USING (film_id) JOIN category USING (category_id) WHERE name = 'Documentary' AND rating = 'G'
+GROUP BY title;
 
 
 
