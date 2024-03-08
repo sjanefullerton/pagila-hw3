@@ -13,7 +13,7 @@ JOIN LATERAL (
     SELECT COUNT(rental_id) AS count, title, name FROM rental
     JOIN inventory USING (inventory_id)
     JOIN film USING (film_id)
-    JOIN film_cateogry USING (film_id)
+    JOIN film_category USING (film_id)
     JOIN category cat USING (category_id)
     WHERE category_id = c.category_id
     GROUP BY title, name 
