@@ -5,8 +5,7 @@
  * Write a SQL query that finds all action fanatics.
  */
 
-SELECT cmer.customer_id, cmer.first_name, cmer.last_name FROM customer cmer
-LEFT JOIN lateral (
+SELECT DISTINCT cmer.customer_id, cmer.first_name, cmer.last_name FROM customer cmer LEFT JOIN lateral (
     SELECT rental_id, rental_date, inventory_id, name FROM rental
     JOIN inventory USING (inventory_id)
     JOIN film_category USING (film_id)
