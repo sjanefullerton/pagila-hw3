@@ -5,15 +5,19 @@
  * Write a SQL query that finds all action fanatics.
  */
 
-SELECT DISTINCT cmer.customer_id, cmer.first_name, cmer.last_name FROM customer cmer LEFT JOIN lateral (
-    SELECT rental_id, rental_date, inventory_id, name FROM rental
-    JOIN inventory USING (inventory_id)
-    JOIN film_category USING (film_id)
-    JOIN category cat USING (category_id)
-    WHERE customer_id = cmer.customer_id
-    ORDER BY rental_date DESC) AS t ON true
-WHERE t.name = 'Action'
-GROUP BY cmer.customer_id
-HAVING COUNT(cmer.customer_id) >= 4;
+
+SELECT cid.customer_id, cid.first_name, cid.last_name FROM customer cid
+LEFT JOIN LATERAL (
+    SELECT COUNT(*) AS acount FROM (
+        SELECT film.film_id FROM rental rent
+        JOIN inventory inv ON (rent.inventory_id = inv.inventory_id)
+        JOIN film AS film ON (inv.film_id = film.film_id)
+        JOIN film_category fcat ON (film.film_id = fcat.film_id)
+        JOIN category cat ON (fcat.category_id = cat.category_id)
+        WHERE rent.customer_id = cid.customer_id AND cat.name = 'ACTION'
+        ORDER BY rent.rental_date DESC
+        LIMIT 5) rents
+) am ON true
+WHERE am.acount >= 4;
 
 
