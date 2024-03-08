@@ -18,7 +18,7 @@ SELECT DISTINCT title FROM film
 JOIN film_category fcat USING(film_id)
 JOIN film_category fcat2 USING(category_id)
 JOIN ( SELECT film_id FROM film WHERE title LIKE 'AMERICAN CIRCUS'
-) as t ON fact2.film_id = film1.film_id
+) as t ON fact2.film_id = t.film_id
 GROUP BY title 
 HAVING COUNT(DISTINCT category_id) = 2 UNION ALL SELECT 'AMERICAN CIRCUS' AS title
 ORDER BY title;
