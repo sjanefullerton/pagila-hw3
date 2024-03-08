@@ -11,7 +11,7 @@ JOIN ( SELECT fact.actor_id FROM film_actor fact
     JOIN film_actor fact4 ON (fact4.film_id = fact4.film_id)
     JOIN actor act2 ON (fact4.actor_id = act2.actor_id)
     WHERE act2.first_name = 'RUSSELL' AND act2.last_name = 'BACALL' EXCEPT
-    SELECT fact1.actor_id FROM film_actor fact
+    SELECT fact.actor_id FROM film_actor fact
     JOIN film_actor fact2 USING (film_id)
     JOIN actor act2 ON (fact2.actor_id = act2.actor_id)
     WHERE act2.first_name = 'RUSSELL' AND act2.last_name = 'BACALL'
