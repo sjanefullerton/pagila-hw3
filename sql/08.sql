@@ -21,7 +21,7 @@
 
 
 
-SELECT title FROM(SELECT title, customer_id FROM film JOIN inventory USING (film_id) JOIN rental USING (inventory_id) WHERE customer_id IN (SELECT customer_id FROM film JOIN inventory USING (film_id) JOIN rental USING (inventory_id) WHERE title = 'BUCKET BROTHERHOOD') AND NOT title = 'BUCKET BROTHERHOOD') selected
+SELECT title FROM(SELECT distinct title, customer_id FROM film JOIN inventory USING (film_id) JOIN rental USING (inventory_id) WHERE customer_id IN (SELECT customer_id FROM film JOIN inventory USING (film_id) JOIN rental USING (inventory_id) WHERE title = 'BUCKET BROTHERHOOD') AND NOT title = 'BUCKET BROTHERHOOD') selected
 GROUP BY title
 HAVING COUNT(title) >=3 
 ORDER BY title;
