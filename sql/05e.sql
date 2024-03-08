@@ -28,6 +28,6 @@ SELECT title FROM (
     GROUP BY f2.title 
 ) selected
 HAVING "count" >= 2
-ORDER BY f2.title;
+ORDER BY title;
 
 
