@@ -6,18 +6,22 @@
  */
 
 
-SELECT cid.customer_id, cid.first_name, cid.last_name FROM customer cid
-LEFT JOIN LATERAL (
-    SELECT COUNT(*) AS acount FROM (
-        SELECT film.film_id FROM rental rent
+SELECT cid.customer_id, cid.first_name, cid.last_name 
+FROM customer AS cid
+LEFT JOIN lateral (
+    SELECT COUNT(*) AS ac 
+    FROM (
+        SELECT film.film_id 
+        FROM rental rent
         JOIN inventory inv ON (rent.inventory_id = inv.inventory_id)
-        JOIN film AS film ON (inv.film_id = film.film_id)
-        JOIN film_category fcat ON (film.film_id = fcat.film_id)
+        JOIN film f ON (inv.film_id = f.film_id)
+        JOIN film_category fcat ON (f.film_id = fcat.film_id)
         JOIN category cat ON (fcat.category_id = cat.category_id)
-        WHERE rent.customer_id = cid.customer_id AND cat.name = 'ACTION'
+        WHERE rent.customer_id = cid.customer_id AND cat.name = 'Action'
         ORDER BY rent.rental_date DESC
-        LIMIT 5) rents
-) am ON true
-WHERE am.acount >= 4;
+        LIMIT 5
+    ) AS rents
+) AS am ON true
+WHERE am.ac >= 4;
 
 
