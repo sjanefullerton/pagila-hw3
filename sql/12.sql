@@ -5,11 +5,10 @@
  * Write a SQL query that finds all action fanatics.
  */
 
-
 SELECT cid.customer_id, cid.first_name, cid.last_name 
-FROM customer AS cid
+FROM customer AS cid 
 LEFT JOIN lateral (
-    SELECT COUNT(*) AS ac 
+    SELECT COUNT(*) AS ac  
     FROM (
         SELECT f.film_id 
         FROM rental rent
@@ -22,6 +21,6 @@ LEFT JOIN lateral (
         LIMIT 5
     ) AS rents
 ) AS am ON true
-WHERE am.ac >= 4;
-
+GROUP BY cid.customer_id
+HAVING COALESCE(am.ac, 0) >= 4;
 
