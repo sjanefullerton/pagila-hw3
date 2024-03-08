@@ -19,6 +19,20 @@
  * This problem should be solved by a self join on the "film_category" table.
  */
 
+SELECT title FROM (
+    SELECT fii.title, COUNT(fii.title) AS count FROM film fi
+    JOIN film_category AS c1 ON (c1.film_id = fi.film_id)
+    JOIN film_category AS c2 ON (c1.film_id = c2.film_id)
+    JOIN film fii ON (fii.film_id = c2.film_id)
+    WHERE fi.title = 'AMERICAN CIRCUS'
+    GROUP BY fii.title
+) titles
+WHERE count >= 2
+ORDER BY title;
+
+
+
+
 SELECT f.title FROM (
     SELECT f2.title , COUNT(f2.title) AS "count" FROM film f
     JOIN film_category AS fc1 ON (fc1.film_id = f.film_id)
