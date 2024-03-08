@@ -19,7 +19,7 @@
  * This problem should be solved by a self join on the "film_category" table.
  */
 
-SELECT title FROM (
+SELECT f.title FROM (
     SELECT f2.title , COUNT(f2.title) AS "count" FROM film f
     JOIN film_category AS fc1 ON (fc1.film_id = f.film_id)
     JOIN film_category AS fc2 USING (category_id)
@@ -28,6 +28,6 @@ SELECT title FROM (
     GROUP BY f2.title 
 ) selected
 HAVING "count" >= 2
-ORDER BY title;
+ORDER BY f.title;
 
 

@@ -8,16 +8,22 @@
  * but I find the version using set operations much more intuitive.
  */
 
-SELECT f.title FROM film f
-JOIN film_actor fa USING (film_id)
-JOIN film_actor a ON (fa.actor_id = a.actor_id)
-JOIN film ff ON (a.film_id = ff.film_id)
-WHERE ff.title = 'AMERICAN CIRCUS'
-INTERSECT
-SELECT f.title FROM film f
-JOIN film_category fc USING (film_id)
-JOIN film_category fcc ON (fc.category_id = fcc.category_id)
-JOIN film ff ON (fcc.film_id = ff.film_id) WHERE ff.title = 'AMERICAN CIRCUS'
-GROUP BY f.title 
-HAVING COUNT(DISTINCT f.title) >= 2;
-
+SELECT f.title 
+FROM film f
+JOIN film_actor fa ON f.film_id = fa.film_id
+JOIN actor a ON fa.actor_id = a.actor_id
+WHERE f.film_id IN (
+    SELECT fc.film_id
+    FROM film_category fc
+    JOIN category c ON fc.category_id = c.category_id
+    WHERE c.name IN ('AMERICAN CIRCUS')
+)
+AND f.film_id IN (
+    SELECT fc.film_id
+    FROM film_category fc
+    JOIN category c ON fc.category_id = c.category_id
+    WHERE c.name IN ('AMERICAN CIRCUS')
+)
+GROUP BY f.title
+HAVING COUNT(DISTINCT fc.category_id) = 2
+AND COUNT(DISTINCT fa.actor_id) = 1;
