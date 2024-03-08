@@ -15,7 +15,7 @@
 SELECT cmer.first_name, cmer.last_name, film.title, joined.rental_date FROM customer cmer
 LEFT JOIN LATERAL (
     SELECT rental_id, rental_date, inventory_id FROM rental WHERE customer_id = cmer.customer_id 
-    ORDER BY rental_date dec limit 1) joined ON true
+    ORDER BY rental_date desc limit 1) joined ON true
 JOIN inventory USING (inventory_id)
 JOIN film USING (film_id);
 
